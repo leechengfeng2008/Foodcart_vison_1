@@ -1,6 +1,5 @@
 package frc.robot.Commands;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
@@ -46,11 +45,11 @@ public class AlignCommand extends Command {
         addRequirements(drivetrain);
 
         // 跟你 RobotContainer 裡的 drive 一樣型態的 request
-        SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+        driveRequest = new SwerveRequest.FieldCentric()
         // 線速度和角速度都加上 10% 的死區
         .withDeadband(maxSpeed * 0.1)
-        .withRotationalDeadband(maxAngularRate * 0.1); 
-        .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+        .withRotationalDeadband(maxAngularRate * 0.1)
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
 
         // 這顆 PID 專門鎖 tx
