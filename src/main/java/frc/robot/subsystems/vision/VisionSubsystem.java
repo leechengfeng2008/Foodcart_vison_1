@@ -30,6 +30,7 @@ public class VisionSubsystem extends SubsystemBase{
     private final static Set<Integer> Blue_Reef_Tags = new HashSet<>(List.of(17,18,19,20,21,22));
     private final static Set<Integer> Red_Reef_Tags  =new HashSet<>(List.of(6,7,8,9,10,11));
     private Set<Integer> currentReefTags;
+    private final Limelight frontLimelight = new Limelight(Limelight_Front_1);
 
     public VisionSubsystem(VisionState visionstste, Swerve swerveSubsystem){
         this.visionstste = visionstste;
@@ -142,5 +143,29 @@ public void updateVision(LimelightHelpers.PoseEstimate megaTags2Pose ,String lim
             }
 
         return false;
+    }
+
+    public boolean getTv(){
+        return LimelightHelpers.getTV(Limelight_Front_1);
+    }
+        /** 給瞄準 / 射擊 command 用的：有沒有看到任何 target */
+    public boolean hasTarget() {
+        return frontLimelight.getTv();
+    }
+    
+        /** 給瞄準 / 射擊 command 用的：目前目標在畫面水平偏移多少度 */
+    public double getTx() {
+        return frontLimelight.getTx();
+    }
+    public double getTy(){
+        return LimelightHelpers.getTY(Limelight_Front_1);
+    }
+
+    public int getID(){
+        if(getTv()){
+            return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Limelight_Front_1).rawFiducials[0].id;
+        }
+    
+        return -1;
     }
 }
