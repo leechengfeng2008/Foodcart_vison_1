@@ -9,6 +9,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import frc.robot.subsystems.vision.VisionFieldPoseEstimate;
 
 //import com.pathplanner.lib.auto.AutoBuilder;
 //import com.pathplanner.lib.config.PIDConstants;
@@ -30,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.generated.TunerConstants_Foodcart;
 import frc.robot.generated. TunerConstants_Foodcart.TunerSwerveDrivetrain;
+import frc.robot.subsystems.vision.VisionFieldPoseEstimate.*;
+
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -39,6 +42,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private final  VisionFieldPoseEstimate visionFieldPoseEstimate = new VisionFieldPoseEstimate(null, m_lastSimTime, null);
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -293,6 +297,14 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    public void addVisionMeasurement(VisionFieldPoseEstimate visionFieldPoseEstimate) {
+        addVisionMeasurement(
+            visionFieldPoseEstimate.getvisionRobotPoseMeters(),
+            Utils.fpgaToCurrentTime(visionFieldPoseEstimate.getTimestampSeconds()),
+            visionFieldPoseEstimate.getvisionMeasurementStdDevs()
+        );
+    }
+
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
@@ -326,4 +338,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
+
+
 }

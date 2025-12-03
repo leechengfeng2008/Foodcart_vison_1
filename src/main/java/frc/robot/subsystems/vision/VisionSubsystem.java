@@ -26,11 +26,11 @@ public class VisionSubsystem extends SubsystemBase{
     private final VisionState visionstste;
     private double lastTimeStampFront = 0.0;
     private Swerve swerveSubsystem;
+    private final Limelight frontLimelight = new Limelight(Limelight_Front_1);
     
     private final static Set<Integer> Blue_Reef_Tags = new HashSet<>(List.of(17,18,19,20,21,22));
     private final static Set<Integer> Red_Reef_Tags  =new HashSet<>(List.of(6,7,8,9,10,11));
     private Set<Integer> currentReefTags;
-    private final Limelight frontLimelight = new Limelight(Limelight_Front_1);
 
     public VisionSubsystem(VisionState visionstste, Swerve swerveSubsystem){
         this.visionstste = visionstste;
