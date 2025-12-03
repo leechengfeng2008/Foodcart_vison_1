@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.AlignCommand;
 import frc.robot.generated.TunerConstants_Foodcart;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.vision.VisionFieldPoseEstimate;
+import frc.robot.subsystems.vision.VisionState;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 
@@ -29,7 +31,8 @@ public class RobotContainer {
   private final CommandXboxController controller_1 = new CommandXboxController(0);
   private final CommandXboxController controller_2 = new CommandXboxController(1);
   public final  Swerve drivetrain = TunerConstants_Foodcart.createDrivetrain();
-  public final VisionSubsystem visionSubsystem = new VisionSubsystem(null, drivetrain);
+  //public final VisionSubsystem visionSubsystem = new VisionSubsystem(new VisionState(), drivetrain);
+  
 
   // 最大線速度（公尺/秒）
   private double MaxSpeed = TunerConstants_Foodcart.kSpeedAt12Volts.in(MetersPerSecond); 
@@ -88,7 +91,7 @@ public class RobotContainer {
           forwardStraight.withVelocityX(-MaxSpeed).withVelocityY(0)));
 
         controller_1.leftBumper().onTrue(drivetrain.runOnce(()->drivetrain.seedFieldCentric()));
-        controller_1.rightBumper().whileTrue(new AlignCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed, MaxAngularRate));
+        //controller_1.rightBumper().whileTrue(new AlignCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed, MaxAngularRate));
 
         controller_2.a().whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         controller_2.b().whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
