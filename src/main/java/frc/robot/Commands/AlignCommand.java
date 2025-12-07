@@ -54,7 +54,7 @@ public class AlignCommand extends Command {
 
         // 這顆 PID 專門鎖 tx
         // 先隨便給一個 P，之後你再用常數或 SmartDashboard 調
-        thetaPID = new PIDController(0.02, 0.0, 0.0);
+        thetaPID = new PIDController(0.007, 0.0, 0.0);
         thetaPID.setSetpoint(0.0);   // 希望 tx = 0
         thetaPID.setTolerance(1.0);  // 接受 ±1 度內視為鎖好
     }
@@ -78,7 +78,7 @@ public class AlignCommand extends Command {
             double tx = limelight.getTx();
 
             // measurement = tx, setpoint 在 constructor 設成 0 了
-            double pidOutput = thetaPID.calculate(tx);
+            double pidOutput = thetaPID.calculate(-tx);
 
             // 把 PID 輸出當成比例係數，換成實際角速度
             // 方向如果反了，可以把這行改成 omega = +pidOutput * maxAngularRate;
