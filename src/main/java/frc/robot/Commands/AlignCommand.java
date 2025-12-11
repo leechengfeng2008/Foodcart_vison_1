@@ -84,11 +84,10 @@ public class AlignCommand extends Command {
             // 方向如果反了，可以把這行改成 omega = +pidOutput * maxAngularRate;
             omega = -pidOutput * maxAngularRate;
         } else {
-            // 沒目標就不要讓積分亂累，直接 reset
+            // 不讓積分亂累
             thetaPID.reset();
         }
 
-        // 4. 用 CTRE 的 setControl 寫法發送需求
         drivetrain.setControl(
             driveRequest
                 .withVelocityX(xSpeed)
@@ -99,7 +98,6 @@ public class AlignCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // 放開按鈕 / command 結束時，要不要停下來看你習慣
         drivetrain.setControl(
             driveRequest
                 .withVelocityX(0)
@@ -111,7 +109,6 @@ public class AlignCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        // 給 whileTrue 用，自己不會結束，靠按鈕放開
         return false;
     }
 }
