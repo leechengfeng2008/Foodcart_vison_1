@@ -72,7 +72,6 @@ public class VisionState {
         
     }
 
-    
     public Pose2d getLatestFieldToRobot(){
         return poseBuffer.getInternalBuffer().lastEntry().getValue();
     }
@@ -88,4 +87,5 @@ public class VisionState {
     public boolean isRedAlliance(){
         return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().equals(Optional.of(Alliance.Red));
     }  
+
 }

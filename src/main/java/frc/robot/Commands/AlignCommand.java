@@ -7,7 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.generated.TunerConstants_Foodcart;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.vision.*;
@@ -24,7 +24,7 @@ public class AlignCommand extends Command {
     private final PIDController thetaPID;
 
   // 最大線速度（公尺/秒）
-  private double maxSpeed = TunerConstants_Foodcart.kSpeedAt12Volts.in(MetersPerSecond); 
+  private double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); 
   // 最大角速度（弧度/秒）
   private double maxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); 
 
@@ -41,7 +41,7 @@ public class AlignCommand extends Command {
         this.maxSpeed = maxSpeed;
         this.maxAngularRate = maxAngularRate;
 
-        // 這個 Command 要控制底盤
+        // replace original drivetrain requirement
         addRequirements(drivetrain);
 
         // 跟你 RobotContainer 裡的 drive 一樣型態的 request
@@ -54,7 +54,7 @@ public class AlignCommand extends Command {
 
         // 這顆 PID 專門鎖 tx
         // 先隨便給一個 P，之後你再用常數或 SmartDashboard 調
-        thetaPID = new PIDController(0.007, 0.0, 0.0);
+        thetaPID = new PIDController(0.005, 0.0, 0.0);
         thetaPID.setSetpoint(0.0);   // 希望 tx = 0
         thetaPID.setTolerance(1.0);  // 接受 ±1 度內視為鎖好
     }

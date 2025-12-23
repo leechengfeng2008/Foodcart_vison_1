@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.AlignCommand;
 import frc.robot.Commands.CloseTagCommand;
-import frc.robot.generated.TunerConstants_Foodcart;
+import frc.robot.Commands.DriveToPoseCommand;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.vision.VisionFieldPoseEstimate;
 import frc.robot.subsystems.vision.VisionState;
@@ -35,7 +37,7 @@ public class RobotContainer {
   private final CommandXboxController controller_1 = new CommandXboxController(0);
   private final CommandXboxController controller_2 = new CommandXboxController(1);
   private final CommandXboxController controller_3 = new CommandXboxController(2);
-  public final  Swerve drivetrain = TunerConstants_Foodcart.createDrivetrain();
+  public final  Swerve drivetrain = TunerConstants.createDrivetrain();
   private final Consumer<VisionFieldPoseEstimate> visionFieldPoseEstimateConsumer = new Consumer<VisionFieldPoseEstimate>() {
         @Override
         public void accept(VisionFieldPoseEstimate visionFieldPoseEstimate) {
@@ -47,9 +49,10 @@ public class RobotContainer {
     };
   public final VisionState visionState = new VisionState(visionFieldPoseEstimateConsumer);
   public final VisionSubsystem visionSubsystem = new VisionSubsystem(visionState, drivetrain);
+  public final PoseEstimatorSubsystem poseEstimatorSubsystem = new PoseEstimatorSubsystem(drivetrain);
 
   // 最大線速度（公尺/秒）
-  private double MaxSpeed = TunerConstants_Foodcart.kSpeedAt12Volts.in(MetersPerSecond); 
+  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); 
   // 最大角速度（弧度/秒）
   private double MaxAngularRate = RotationsPerSecond.of(0.8).in(RadiansPerSecond); 
   private double MaxAngularRate1 = RotationsPerSecond.of(10).in(RadiansPerSecond); 
@@ -109,6 +112,7 @@ public class RobotContainer {
         controller_1.leftBumper().onTrue(drivetrain.runOnce(()->drivetrain.seedFieldCentric()));
         controller_1.rightBumper().whileTrue(new AlignCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed, MaxAngularRate1));
         controller_1.leftTrigger().whileTrue(new CloseTagCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed));
+        controller_1.y().whileTrue(new DriveToPoseCommand(drivetrain, 0.01,0.01, 0));
 
 
 
@@ -117,7 +121,7 @@ public class RobotContainer {
         controller_2.x().whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         controller_2.y().whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        controller_3.a().whileTrue((new AlignCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed, MaxAngularRate1)));
+        // controller_3.a().whileTrue((new AlignCommand(drivetrain, visionSubsystem, controller_1, MaxSpeed, MaxAngularRate1)));
 
 
         drivetrain.registerTelemetry(logger::telemeterize);

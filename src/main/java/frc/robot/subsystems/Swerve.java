@@ -17,6 +17,7 @@ import frc.robot.subsystems.vision.VisionFieldPoseEstimate;
 //import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -29,8 +30,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-import frc.robot.generated.TunerConstants_Foodcart;
-import frc.robot.generated. TunerConstants_Foodcart.TunerSwerveDrivetrain;
+import frc.robot.generated.TunerConstants;
+import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.generated. TunerConstants;
 import frc.robot.subsystems.vision.VisionFieldPoseEstimate.*;
 
 
@@ -193,7 +195,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         Matrix<N3, N1> visionStandardDeviation,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
-        super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+        super(drivetrainConstants, odometryUpdateFrequency, VecBuilder.fill(999, 999, 0.001), visionStandardDeviation, modules);
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -280,7 +282,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        //Pose2d currentPose = getState().Pose;
+
     }
+
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -338,6 +344,5 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
-
 
 }

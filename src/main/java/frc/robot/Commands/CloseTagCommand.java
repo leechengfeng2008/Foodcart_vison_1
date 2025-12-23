@@ -31,9 +31,9 @@ public class CloseTagCommand extends Command {
     private static final double TARGET_HEIGHT_M = 0.300;  // 30 cm
     // 相機往上仰角（請用實際量到的，之前你說大約 23 度）
     private static final Rotation2d CAMERA_PITCH_UP =
-        Rotation2d.fromDegrees(20.0);
+        Rotation2d.fromDegrees(30.0);
     // 希望離 Tag 平面距離 (m)
-    private static final double TARGET_DISTANCE_M = 0.050; // 15 cm
+    private static final double TARGET_DISTANCE_M = 0.07; // 15 cm
 
     // 距離控制的 P（先用小一點，實機再調）
     private static final double kP_DISTANCE = 3.0;
@@ -130,8 +130,8 @@ public class CloseTagCommand extends Command {
         // ======= 發送到底盤 =======
         drivetrain.setControl(
             driveRequest
-                .withVelocityY(forwardSpeed)  // 以「前進」為正方向
-                .withVelocityX(0.0)
+                .withVelocityX(-forwardSpeed)  // 以「前進」為正方向
+                .withVelocityY(0.0)
                 .withRotationalRate(0.0)
         );
     }
