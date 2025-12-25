@@ -44,7 +44,6 @@ public class RobotContainer {
             drivetrain.addVisionMeasurement(visionFieldPoseEstimate);
             // SmartDashboard.putNumber("vision X into drivetrain", visionFieldPoseEstimate.getVisionRobotPoseMeters().getX());
             // SmartDashboard.putNumber("vision Y into drivetrain", visionFieldPoseEstimate.getVisionRobotPoseMeters().getY());
-            
         }
     };
   public final VisionState visionState = new VisionState(visionFieldPoseEstimateConsumer);
@@ -57,9 +56,11 @@ public class RobotContainer {
   private double MaxAngularRate = RotationsPerSecond.of(0.8).in(RadiansPerSecond); 
   private double MaxAngularRate1 = RotationsPerSecond.of(10).in(RadiansPerSecond); 
 
+
+
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         // 線速度和角速度都加上 10% 的死區
-        .withDeadband(MaxSpeed * 0.1)
+        .withDeadband(1)
         .withRotationalDeadband(MaxAngularRate * 0.1) 
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); 
 
@@ -88,12 +89,11 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
     // Drivetrain will execute this command periodically
     drivetrain.applyRequest(() ->
-      drive.withVelocityX(-controller_1.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+      drive.withVelocityX(-controller_1.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
       .withVelocityY(-controller_1.getLeftX() * MaxSpeed) // Drive left with negative X (left)
       .withRotationalRate(-controller_1.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-
       final var idle = new SwerveRequest.Idle();
       RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)

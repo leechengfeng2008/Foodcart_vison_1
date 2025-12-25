@@ -68,7 +68,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
             // 調用你 Swerve 類別中的 addVisionMeasurement
             // 此方法會透過卡爾曼濾波器自動融合數據
-            m_swerve.addVisionMeasurement(visionPose, timestampSeconds,VecBuilder.fill(0.1, 0.1, 1));
+            m_swerve.addVisionMeasurement(visionPose, timestampSeconds,VecBuilder.fill(0.01, 0.01, 1));
         }
     }
 
